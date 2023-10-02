@@ -11,19 +11,18 @@
     // When form submitted, insert values into the database.
     if (isset($_REQUEST['email'])) {
         // removes backslashes
-        $name = stripslashes($_REQUEST['name']);
+        $nome = stripslashes($_REQUEST['nome']);
         //escapes special characters in a string
-        $name = mysqli_real_escape_string($con, $name);
+        $nome = mysqli_real_escape_string($con, $nome);
 
-        $surname = stripslashes($_REQUEST['surname']);
-        $surname = mysqli_real_escape_string($con, $surname);
+        $cognome = stripslashes($_REQUEST['cognome']);
+        $cognome = mysqli_real_escape_string($con, $cognome);
         $email    = stripslashes($_REQUEST['email']);
         $email    = mysqli_real_escape_string($con, $email);
         $password = stripslashes($_REQUEST['password']);
         $password = mysqli_real_escape_string($con, $password);
-        $create_datetime = date("Y-m-d H:i:s");
-        $query    = "INSERT into `users` (email, password, name, surname, create_datetime)
-                     VALUES ('$email', '" . md5($password) . "', '$name','$surname', '$create_datetime')";
+        $query    = "INSERT into `utenti` (email, password, nome, cognome)
+                     VALUES ('$email', '" . md5($password) . "', '$nome','$cognome')";
         $result   = mysqli_query($con, $query);
         if ($result) {
             echo "<div class='form'>
@@ -40,10 +39,10 @@
 ?>
     <form class="form" action="" method="post">
         <h1 class="login-title">Crea il tuo account</h1>
-        <label for="name">Inserisci il nome</label>
-        <input type="text" class="login-input" name="name" placeholder="Mario" required />
+        <label for="nome">Inserisci il nome</label>
+        <input type="text" class="login-input" name="nome" placeholder="Mario" required />
         <label for="surname">Inserisci il cognome</label>
-        <input type="text" class="login-input" name="surname" placeholder="Rossi" required />
+        <input type="text" class="login-input" name="cognome" placeholder="Rossi" required />
         <label for="email">Inserisci l'email</label>
         <input type="text" class="login-input" name="email" placeholder="name@example.com">
         <label for="password">Inserisci la password</label>

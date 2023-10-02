@@ -13,22 +13,31 @@
     if (isset($_POST['email'])) {
         $email = stripslashes($_REQUEST['email']);    // removes backslashes
         $email = mysqli_real_escape_string($con, $email);
-        // $name = stripslashes($_REQUEST['name']);
-        // $name = mysqli_real_escape_string($con, $name);
         $password = stripslashes($_REQUEST['password']);
         $password = mysqli_real_escape_string($con, $password);
         // Check user is exist in the database
-        $query = "SELECT * FROM `users` WHERE email='$email'
+        $query = "SELECT * FROM `utenti` WHERE email='$email'
                     AND password='" . md5($password) . "'";
-        $nameQuery = "SELECT name FROM `users` WHERE email='$email'
+        $queryNome = "SELECT nome FROM `utenti` WHERE email='$email'
+                        AND password='" . md5($password) . "'";
+
+        $queryCognome = "SELECT cognome FROM `utenti` WHERE email='$email'
                         AND password='" . md5($password) . "'";
         $result = mysqli_query($con, $query) or die(mysql_error());
-        $resultName = mysqli_query($con, $nameQuery) or die(mysql_error());
-        $name = mysqli_fetch_assoc($resultName); 
+
+        $risultatoNome = mysqli_query($con, $queryNome) or die(mysql_error());
+        $nome = mysqli_fetch_assoc($risultatoNome); 
+
+        $risultatoCognome = mysqli_query($con, $queryCognome) or die(mysql_error());
+        $cognome = mysqli_fetch_assoc($risultatoCognome);
+
         $rows = mysqli_num_rows($result);
+
         if ($rows == 1) {
+            // Mando l'email/nome/cognome dell'utente connesso alla dashboard
             $_SESSION['email'] = $email;
-            $_SESSION['name'] = $name;
+            $_SESSION['nome'] = $nome;
+            $_SESSION['cognome'] = $cognome;
             // Redirect to user dashboard page
             header("Location: dashboard.php");
         } else {
