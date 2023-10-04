@@ -1,17 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Registration</title>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
 <?php
     require('db.php');
     $errors = array();
+ 
 
     // When form submitted, insert values into the database.
     if (isset($_POST['submit'])) {
         // Validate nome
         if (empty($_POST['nome'])) {
             $errors['nome'] = "* Il nome è richiesto.";
+        } elseif (strlen($_POST['nome']) < 3 || strlen($_POST['nome']) > 50) {
+            $errors['nome'] = "* Il nome deve essere lungo tra 3 e 50 caratteri.";
         }
 
         // Validate cognome
         if (empty($_POST['cognome'])) {
             $errors['cognome'] = "* Il cognome è richiesto.";
+        } elseif (strlen($_POST['cognome']) < 3 || strlen($_POST['cognome']) > 50) {
+            $errors['cognome'] = "* Il cognome deve essere lungo tra 3 e 50 caratteri.";
         }
 
         // Validate email
@@ -24,6 +37,8 @@
         // Validate password
         if (empty($_POST['password'])) {
             $errors['password'] = "* La password è richiesta.";
+        } elseif (strlen($_POST['password']) < 6 || strlen($_POST['password']) > 20) {
+            $errors['password'] = "* La password deve essere lunga tra 6 e 20 caratteri.";
         }
 
         // If no validation errors, proceed with registration
@@ -52,48 +67,33 @@
                       </div>";
             }
         }
+    } else {
+?>
+    <form class="form" action="" method="post">
+    <h1 class="login-title">Crea il tuo account</h1>
+
+    <label for="nome">Inserisci il nome</label>
+    <input type="text" class="login-input" name="nome" placeholder="Mario" required />
+    <?php echo isset($errors['nome']) ? "<span class='error'>" . $errors['nome'] . "</span>" : ""; ?>
+
+    <label for="cognome">Inserisci il cognome</label>
+    <input type="text" class="login-input" name="cognome" placeholder="Rossi" required />
+    <?php echo isset($errors['cognome']) ? "<span class='error'>" . $errors['cognome'] . "</span>" : ""; ?>
+
+    <label for="email">Inserisci l'email</label>
+    <input type="text" class="login-input" name="email" placeholder="name@example.com" required />
+    <?php echo isset($errors['email']) ? "<span class='error'>" . $errors['email'] . "</span>" : ""; ?>
+
+    <label for="password">Inserisci la password</label>
+    <input type="password" class="login-input" name="password" placeholder="Scrivila qui" required />
+    <?php echo isset($errors['password']) ? "<span class='error'>" . $errors['password'] . "</span>" : ""; ?>
+
+    <input type="submit" name="submit" value="REGISTRATI" class="login-button">
+    <p class="link"><a href="login.php">Hai già un account? Accedi</a></p>
+</form>
+
+<?php
     }
 ?>
-
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8"/>
-    <title>Registration</title>
-    <link rel="stylesheet" href="style.css"/>
-</head>
-<body>
-    <form class="form" action="" method="post">
-        <h1 class="login-title">Crea il tuo account</h1>
-        <div class="login-input-box">
-
-            <label for="nome">Inserisci il nome</label>
-            <input type="text" class="login-input" name="nome" placeholder="Mario" required />
-            <?php if (isset($errors['nome'])) { echo "<span class='error'>" . $errors['nome'] . "</span>"; } ?>
-        </div>
-        <div class="login-input-box">
-
-            <label for="surname">Inserisci il cognome</label>
-            <input type="text" class="login-input" name="cognome" placeholder="Rossi" required />
-            <?php if (isset($errors['cognome'])) { echo "<span class='error'>" . $errors['cognome'] . "</span>"; } ?>
-        </div>
-
-        <div class="login-input-box">
-            
-            <label for="email">Inserisci l'email</label>
-            <input type="text" class="login-input" name="email" placeholder="name@example.com" required />
-            <?php if (isset($errors['email'])) { echo "<span class='error'>" . $errors['email'] . "</span>"; } ?>
-        </div>
-
-        <div class="login-input-box">
-
-            <label for="password">Inserisci la password</label>
-            <input type="password" class="login-input" name="password" placeholder="Scrivila qui" required />
-            <?php if (isset($errors['password'])) { echo "<span class='error'>" . $errors['password'] . "</span>"; } ?>
-        </div>
-
-        <input type="submit" name="submit" value="REGISTRATI" class="login-button">
-        <p class="link"><a href="login.php">Hai già un account? Accedi</a></p>
-    </form>
 </body>
 </html>

@@ -1,38 +1,35 @@
 <?php
-    // ini_set("SMTP", "localhost");
-    // ini_set("smtp_port", 25);
     //include auth_session.php file on all user panel pages
     include("auth_session.php");
     // chiedo i dati degli eventi al database
     require_once("get_eventi.php");
-    // require_once("send_mail.php");
-    $mail = $_SESSION['email'];
-    $events = getEventi($mail);
-    // Funzione per inviare l'email di reset password
-function sendResetEmail($to, $subject, $message, $headers) {
-    mail($to, $subject, $message, $headers);
-}
-
-// Se è stato fatto un clic sul pulsante di reset password
-if (isset($_POST['reset_password'])) {
-    // Definisci le variabili to, subject, message, e headers
-  
-    $to      = 'mavbafpcmq@hitbase.net';
-    $subject = 'Reset Password';
-    $message = 'Ciao clicka il link per resettare la tua password';
-    $headers = "MIME-Version: 1.0" . "\r\n";
-    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-    $headers .= 'From: simcictilen@gmail.com' . "\r\n"; 
-    // . 'X-Mailer: PHP/' . phpversion();
+    require_once("send_mail.php");
     
-    // Chiama la funzione per inviare l'email
-    try {
-        sendResetEmail($to, $subject, $message, $headers);
-        echo "Email inviata con successo.";
-    } catch (Exception $e) {
-        echo "Errore nell'invio dell'email: " . $e->getMessage();
+    $events = getEventi($mail);
+    // Controllo se l'email è stata mandata tramite $_SESSION['mail_sent'] e invio di messaggio di successo
+    if(isset($_SESSION['mail_sent'])){
+        // echo("<script> alert('Email inviata con successo.')</script>");
+        echo "L'e-mail è stata mandata con successo!";
+        //reset della sessione mail_sent cosi da non rivedere il messaggio al reload della pagina 
+        $_SESSION['mail_sent'] = Null;
+
     }
-}
+
+    // Se è stato fatto un clic sul pulsante di reset password
+    if (isset($_POST['reset_password'])) {
+        
+        // Chiama la funzione per inviare l'email
+            try {
+                sendResetEmail($to, $subject, $message, $headers);
+                // do un valore a $_SESSION['mail_sent'] cosi da poter poi mandare un messaggio di mandata mail su schermo 
+                $_SESSION['mail_sent']="Y";
+                // uso header per farsì che nel reload della pagina non venga rimandata un'email tramite la funzione sendResetEmail
+                header('Location: '.$_SERVER['REQUEST_URI']);
+                
+            } catch (Exception $e) {
+                echo "Errore nell'invio dell'email: " . $e->getMessage();
+            }
+    }
 ?>
 
 <!DOCTYPE html>
