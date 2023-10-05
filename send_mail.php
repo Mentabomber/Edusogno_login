@@ -1,5 +1,4 @@
 <?php
-
     // Prendo l'email della sessione attiva per definire chi è loggato
     $mail = $_SESSION['email'];
 

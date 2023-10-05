@@ -4,7 +4,7 @@
     // chiedo i dati degli eventi al database
     require_once("get_eventi.php");
     require_once("send_mail.php");
-    
+    var_dump($_SESSION['tipo_user']);
     $events = getEventi($mail);
     // Controllo se l'email è stata mandata tramite $_SESSION['mail_sent'] e invio di messaggio di successo
     if(isset($_SESSION['mail_sent'])){

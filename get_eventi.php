@@ -1,5 +1,4 @@
 <?php
-
 function getEventi($mail) {
 
 // Define the constants for the db connection
@@ -19,14 +18,29 @@ if ($conn && $conn->connect_error) {
     return;
 }
 
-// Prepare the query
-$sql = "SELECT nome_evento, data_evento FROM eventi WHERE attendees LIKE ?";
-$stmt = $conn->prepare($sql);
+$currentPath = $_SERVER['REQUEST_URI'];
+
+// Check if the current path is equal to a specific path
+if ($currentPath == '/Progetto-Edusogno/Edusogno_login/admin_dashboard.php') {
+    
+    $sql = "SELECT nome_evento, data_evento, id FROM eventi";
+
+    $stmt = $conn->prepare($sql);
+    
+} else {
+    
+    $sql = "SELECT nome_evento, data_evento FROM eventi WHERE attendees LIKE ?";
+
+    // Prepare the query
+
+    $stmt = $conn->prepare($sql);
 
 
-// Bind the parameter
-$arg = '%' . $mail . '%';
-$stmt->bind_param("s", $arg);
+    // Bind the parameter
+    $arg = '%' . $mail . '%';
+    $stmt->bind_param("s", $arg);
+}
+
 
 // Execute the query
 $stmt -> execute();
@@ -54,4 +68,5 @@ $conn->close();
 
 return [];
 }
+
 ?>

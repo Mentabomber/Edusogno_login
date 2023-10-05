@@ -33,6 +33,7 @@
                 // Fetch additional user details
                 $queryNome = "SELECT nome FROM `utenti` WHERE email='$email'";
                 $queryCognome = "SELECT cognome FROM `utenti` WHERE email='$email'";
+                $queryTipoUSer ="SELECT tipo_user FROM `utenti` WHERE email='$email'";
 
                 $risultatoNome = mysqli_query($con, $queryNome) or die(mysql_error());
                 $nome = mysqli_fetch_assoc($risultatoNome);
@@ -40,13 +41,26 @@
                 $risultatoCognome = mysqli_query($con, $queryCognome) or die(mysql_error());
                 $cognome = mysqli_fetch_assoc($risultatoCognome);
 
+                $risultatoTipoUser = mysqli_query($con, $queryTipoUSer) or die(mysql_error());
+                $tipoUser = mysqli_fetch_assoc($risultatoTipoUser);
+
                 // Set session variables
                 $_SESSION['email'] = $email;
                 $_SESSION['nome'] = $nome;
                 $_SESSION['cognome'] = $cognome;
+                $_SESSION['tipo_user'] = $tipoUser;
+                var_dump($tipoUser);
 
-                // Redirect to user dashboard page
-                header("Location: dashboard.php");
+                if ($_SESSION['tipo_user']['tipo_user'] == "admin") {
+                    // Redirect to admin_dashboard page
+                    header("Location: admin_dashboard.php");
+                }
+                else{
+                    // Redirect to user dashboard page
+                    header("Location: dashboard.php");
+                }
+               
+                
             } else {
                 // Password is incorrect
                 echo "<div class='form'>
