@@ -9,9 +9,9 @@
 </head>
 <body>
 <?php
-    session_start();
     require('db.php');
     require_once('header.php');
+    session_start();
     // When form submitted, check and create user session.
     if (isset($_POST['email'])) {
         $email = stripslashes($_REQUEST['email']);    // removes backslashes
@@ -120,15 +120,9 @@
             const type = password.getAttribute("type") === "password" ? "text" : "password";
             password.setAttribute("type", type);
             
-            // toggle the icon
-            this.classList.toggle("bi-eye");
         });
 
-        // prevent form submit
-        const form = document.querySelector("form");
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-        });
+        
     </script>
 </body>
 </html>
