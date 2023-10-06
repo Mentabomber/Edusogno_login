@@ -55,7 +55,7 @@ header{
     width: 1440px;
     
 }
-
+h1.dashboard-title,
 h1.login-title {
     margin-top: 80px;
     color: #134077;
@@ -163,7 +163,59 @@ h1.login-title {
     font-weight: 700;
     line-height: 99.5%;
 }
-main{
-    
+
+
+/* dashboard */
+.dashboard-title{
+
+}
+#events-container{
+    display: flex;
+    justify-content: space-between;
+    align-content: left; 
+    flex-wrap: wrap;
+    width: 80%;
+    margin: 50px auto;
+    gap: 25px;
 }
 
+.event-card{
+    word-break: break-all;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: start;
+    width: 300px;
+    min-height: 200px;
+    border-radius: 19px;
+    border: 1px solid #134077;
+    background: #FFF;
+    padding: 25px;
+}
+.event-card h3{
+    color: #231F20;
+    text-align: center;
+    font-family: DM Sans;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 99.5%; /* 35.82px */
+}
+
+.event-card span{
+    color: #CCC;
+    font-family: DM Sans;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 99.5%; /* 19.9px */
+}
+
+.event-card button{
+    width: 100%;
+    min-height: 50px;
+    border: none;
+    border-radius: 11px;
+    background: #0057FF;
+    color: white;
+}

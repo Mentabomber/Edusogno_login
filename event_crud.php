@@ -88,24 +88,4 @@ class EventController {
         $this->conn->close();
     }
 }
-
-// // Example usage:
-// // Replace 'your_host', 'your_username', 'your_password', and 'your_database' with actual values
-// $eventController = new EventController('your_host', 'your_username', 'your_password', 'your_database');
-
-// // Add an event
-// $eventController->addEvent(new Event('Event Title', '2023-01-01', 'Attendee 1, Attendee 2', 'Event Description'));
-
-// // Edit an event (assuming there is an event with id=1)
-// $eventController->editEvent(1, new Event('Updated Event Title', '2023-02-01', 'New Attendee 1, New Attendee 2', 'Updated Event Description'));
-
-// // Delete an event (assuming there is an event with id=2)
-// $eventController->deleteEvent(2);
-
-// // Get all events
-// $allEvents = $eventController->getAllEvents();
-// print_r($allEvents);
-
-// // Close the database connection
-// $eventController->closeConnection();
 ?>

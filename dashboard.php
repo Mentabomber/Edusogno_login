@@ -45,28 +45,30 @@
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="form">
-        <h1>Ciao <?php echo $_SESSION['nome']['nome'] . " " . $_SESSION['cognome']['cognome']?> ecco i tuoi eventi</h1>
-        <?php 
-        // messaggio ricevuto se non ci sono eventi disponibili
-        if (count($events) < 1) { ?>
-            <h3>Non ci sono eventi disponibili al momento.</h3>
-        <?php } 
-        else { ?>
-               <?php  
-                foreach ($events as $event) { ?>
-                    <div class='card-evento'>
-                        <h3><?php echo $event['nome_evento']; ?></h3><br/>
-                        <span><?php echo $event['data_evento']; ?></span><br/>
-                        <button>JOIN</button>
-                    </div>
-        <?php   } ?>
-<?php   } ?>
+    <div class="container">
+        <h1 class="dashboard-title">Ciao <?php echo $_SESSION['nome']['nome'] . " " . $_SESSION['cognome']['cognome']?> ecco i tuoi eventi</h1>
+        <div id="events-container">
+            <?php 
+            // messaggio ricevuto se non ci sono eventi disponibili
+            if (count($events) < 1) { ?>
+                <h3>Non ci sono eventi disponibili al momento.</h3>
+            <?php } 
+            else { ?>
+                   <?php  
+                    foreach ($events as $event) { ?>
+                        <div class="event-card">
+                            <h3><?php echo $event['nome_evento']; ?></h3><br/>
+                            <span><?php echo $event['data_evento']; ?></span><br/>
+                            <button>JOIN</button>
+                        </div>
+                    <?php   } ?>
+            <?php   } ?>
+        </div>
         <br/>
-        <form method="post">
-            <p><button type="submit" name="reset_password">Resetta psw</button></p>
-        </form>
-        <p><a href="logout.php">Logout</a></p>
+            <form method="post">
+                <p><button type="submit" name="reset_password">Resetta psw</button></p>
+            </form>
+            <p><a href="logout.php">Logout</a></p>
     </div>
 </body>
 </html>

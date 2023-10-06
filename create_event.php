@@ -8,11 +8,11 @@
     // When form submitted, insert values into the database.
     if (isset($_POST['submit'])) {
         // // Validate nome
-        // if (empty($_POST['nome'])) {
-        //     $errors['nome'] = "* Il nome è richiesto.";
-        // } elseif (strlen($_POST['nome']) < 3 || strlen($_POST['nome']) > 50) {
-        //     $errors['nome'] = "* Il nome deve essere lungo tra 3 e 50 caratteri.";
-        // }
+        if (empty($_POST['nome_evento'])) {
+            $errors['title'] = "* Il titolo è richiesto.";
+        } elseif (strlen($_POST['nome_evento']) < 3 || strlen($_POST['nome_evento']) > 25) {
+            $errors['title'] = "* Il nome deve essere lungo tra 3 e 25 caratteri.";
+        }
 
         // // Validate cognome
         // if (empty($_POST['cognome'])) {
@@ -59,7 +59,6 @@
             $description = mysqli_real_escape_string($con, $_POST['description']);
         
             $eventController->addEvent(new Event($title, $dataEvento, $attendees, $description));
-            var_dump($attendees);
             $to      = $attendeesArray;
             $subject = 'Creazione nuovo evento';
             $message = 'E stato creato un nuovo evento di cui fai parte!' ;
@@ -141,7 +140,5 @@ $descriptionValue = (isset($_POST['description']) && !isset($errors['description
     <?php
     // } // End of conditional statement
 ?>
-
-
 </body>
 </html>
