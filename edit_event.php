@@ -1,45 +1,36 @@
 <?php
     require('db.php');
+    include('auth_session.php');
     include('event_crud.php');
     require_once("send_mail.php");
+    var_dump($_SESSION['event_id']);
     $eventController = new EventController('localhost', 'root', '', 'db-edusogno');
+
+    $id = $_SESSION['event_id'];
+    var_dump($id);
+
+    $eventById = $eventController->getEventById($id);
+    
+    var_dump($eventById);
+    
+    $nomeEvento = $eventById->title;
+    $dataEvento = $eventById->dataEvento;
+    $attendees = $eventById->attendees;
+    $description = $eventById->description;
+    // $attendees = isset($_POST['attendees']) ? implode(', ', (array)$_POST['attendees']) : '';
+    
+    
+   
     $errors = array();
 
     // When form submitted, insert values into the database.
     if (isset($_POST['submit'])) {
-        // // Validate nome
-        // if (empty($_POST['nome'])) {
-        //     $errors['nome'] = "* Il nome è richiesto.";
-        // } elseif (strlen($_POST['nome']) < 3 || strlen($_POST['nome']) > 50) {
-        //     $errors['nome'] = "* Il nome deve essere lungo tra 3 e 50 caratteri.";
-        // }
-
-        // // Validate cognome
-        // if (empty($_POST['cognome'])) {
-        //     $errors['cognome'] = "* Il cognome è richiesto.";
-        // } elseif (strlen($_POST['cognome']) < 3 || strlen($_POST['cognome']) > 50) {
-        //     $errors['cognome'] = "* Il cognome deve essere lungo tra 3 e 50 caratteri.";
-        // }
-
-        // // Validate email
-        // if (empty($_POST['email'])) {
-        //     $errors['email'] = "* L'email è richiesta.";
-        // } elseif (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-        //     $errors['email'] = "* L'email non è valida.";
-        // }
-
-        // // Validate password
-        // if (empty($_POST['password'])) {
-        //     $errors['password'] = "* La password è richiesta.";
-        // } elseif (strlen($_POST['password']) < 6 || strlen($_POST['password']) > 20) {
-        //     $errors['password'] = "* La password deve essere lunga tra 6 e 20 caratteri.";
-        // }
+    
         // Validation code for attendees
         if (empty($_POST['attendees'])) {
             $errors['attendees'] = "* L'elenco dei partecipanti è richiesto.";
         } else {
             $attendeesArray = explode(',', $_POST['attendees']);
-            var_dump($attendeesArray);
             foreach ($attendeesArray as $email) {
                 $trimmedEmail = trim($email);
                 $pattern = "/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/";
@@ -51,21 +42,21 @@
         }
         // If no validation errors, proceed with registration
         if (empty($errors)) {
-            $title = mysqli_real_escape_string($con, $_POST['nome_evento']);
-            $dataEvento = mysqli_real_escape_string($con, $_POST['data_evento']);
-        
-            $attendees = isset($_POST['attendees']) ? implode(', ', (array)$_POST['attendees']) : '';
-           
-            $description = mysqli_real_escape_string($con, $_POST['description']);
-        
-            $eventController->addEvent(new Event($title, $dataEvento, $attendees, $description));
-            var_dump($attendees);
+            
+            $editedNomeEvento = $_POST['nome_evento'];
+            $editedDataEvento = $_POST['data_evento'];
+            $editedAttendees = $_POST['attendees'];
+            $editedDescription = $_POST['description'];
+            
+            $eventController->editEvent($id, new Event($editedNomeEvento, $editedDataEvento, $editedAttendees, $editedDescription));
+
             $to      = $attendeesArray;
-            $subject = 'Creazione nuovo evento';
-            $message = 'E stato creato un nuovo evento di cui fai parte!' ;
+            $subject = 'Modifica Evento';
+            $message = "Un evento a cui partecipi e' stato modificato" ;
             $headers = "MIME-Version: 1.0" . "\r\n";
             $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
             $headers .= 'From: simcictilen@gmail.com' . "\r\n";
+            $_SESSION['modifica_evento'] = false;
             // Chiama la funzione per inviare l'email
             try {
                 
@@ -75,7 +66,8 @@
                 echo "Errore nell'invio dell'email: " . $e->getMessage();
             }
         }
-         // If registration is successful, set a flag
+        $eventController->closeConnection();
+        // If registration is successful, set a flag
         //  $creationnSuccessful = ($stmt->affected_rows > 0);
     }
 // Set values for valid fields or empty strings for fields with errors
@@ -108,35 +100,35 @@ $descriptionValue = (isset($_POST['description']) && !isset($errors['description
     
 ?>
 <form class="form" action="" method="post">
-        <h1 class="login-title">Crea un nuovo evento</h1>
+        <h1 class="login-title">Modifica evento</h1>
         <div class="login-input-box">
 
             <label for="nome_evento">Inserisci il titolo</label>
-            <input type="text" class="login-input" name="nome_evento" value="<?php echo $titleValue; ?>" required />
+            <input type="text" class="login-input" name="nome_evento" value="<?php echo $nomeEvento; ?>" required />
             <?php echo isset($errors['title']) ? "<span class='error'>" . $errors['title'] . "</span>" : ""; ?>
         </div>
         <div class="login-input-box">
 
             <label for="data_evento">Inserisci la data</label>
-            <input type="datetime-local" class="login-input" name="data_evento" value="<?php echo $dataEventoValue; ?>" required />
+            <input type="datetime-local" class="login-input" name="data_evento" value="<?php echo $dataEvento; ?>" required />
             <?php if (isset($errors['data_evento'])) { echo "<span class='error'>" . $errors['data_evento'] . "</span>"; } ?>
         </div>
 
         <div class="login-input-box">
             
             <label for="attendees">Inserisci le mail dei partecipanti</label>
-            <input type="text" class="login-input" name="attendees"  value="<?php echo $attendeesValue; ?>" required />
+            <input type="text" class="login-input" name="attendees"  value="<?php echo $attendees; ?>" required />
             <?php if (isset($errors['attendees'])) { echo "<span class='error'>" . $errors['attendees'] . "</span>"; } ?>
         </div>
 
         <div class="login-input-box">
 
             <label for="description">Inserisci la descrizione</label>
-            <input type="text" class="login-input" name="description" value="<?php echo $descriptionValue; ?>" required />
+            <input type="text" class="login-input" name="description" value="<?php echo $description; ?>" required />
             <?php if (isset($errors['description'])) { echo "<span class='error'>" . $errors['description'] . "</span>"; } ?>
         </div>
 
-        <input type="submit" name="submit" value="CREA" class="login-button">
+        <input type="submit" name="submit" value="Modifica" class="login-button">
     </form>
     <?php
     // } // End of conditional statement
