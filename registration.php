@@ -1,5 +1,6 @@
 <?php
     require('db.php');
+    require_once('header.php');
     $errors = array();
 
     // When form submitted, insert values into the database.

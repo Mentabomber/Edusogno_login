@@ -1,8 +1,7 @@
 <?php
     // Prendo l'email della sessione attiva per definire chi è loggato
     $mail = $_SESSION['email'];
-    var_dump($mail = $_SESSION['email']);
-    var_dump($_SESSION['reset_password']);
+
     // $multipleMails = $_SESSION['email_array'];
 
     // function typeOfMailSubmission(){
